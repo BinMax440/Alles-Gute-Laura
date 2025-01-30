@@ -63,19 +63,19 @@
             0%, 100% { transform: rotate(0deg); }
             50% { transform: rotate(20deg); }
         }
-        .slideshow {
+        .slideshow, .games, .memory-game, .puzzle-game, .slider-game {
             width: 100%;
             max-width: 600px;
             margin: 0 auto;
             position: relative;
             display: none; /* initially hidden */
         }
-        .slideshow img {
+        .slideshow img, .memory-game img, .puzzle-game img, .slider-game img {
             width: 100%;
             display: none;
             border-radius: 15px;
         }
-        .slideshow img.active {
+        .slideshow img.active, .memory-game img.active, .puzzle-game img.active, .slider-game img.active {
             display: block;
         }
     </style>
@@ -88,11 +88,26 @@
         <button onclick="showMessage()">Klick mich!</button>
         <p id="message"></p>
         <p id="counter"></p>
-        <input type="password" id="slideshowPassword" placeholder="Passwort eingeben">
+        <input type="password" id="gamePassword" placeholder="Passwort eingeben">
+        <button onclick="startGames()">Start Spiele</button>
+    </div>
+    <div class="games">
         <button onclick="startSlideshow()">Start Slideshow</button>
+        <button onclick="startMemoryGame()">Start Memory</button>
+        <button onclick="startPuzzleGame()">Start Puzzle</button>
+        <button onclick="startSliderGame()">Start Slider</button>
     </div>
     <div class="slideshow">
         <!-- Bilder werden hier dynamisch hinzugefügt -->
+    </div>
+    <div class="memory-game">
+        <!-- Memory-Spiel wird hier dynamisch hinzugefügt -->
+    </div>
+    <div class="puzzle-game">
+        <!-- Puzzle-Spiel wird hier dynamisch hinzugefügt -->
+    </div>
+    <div class="slider-game">
+        <!-- Slider-Spiel wird hier dynamisch hinzugefügt -->
     </div>
     <script>
         const text = "Happy Birthday, Laura! ";
@@ -143,7 +158,7 @@
         setInterval(updateCounter, 1000);
         updateCounter();
 
-        // Bilder für die Slideshow hinzufügen
+        // Bilder hinzufügen
         const images = 41;
         const slideshow = document.querySelector('.slideshow');
         for (let i = 1; i <= images; i++) {
@@ -153,23 +168,43 @@
             slideshow.appendChild(img);
         }
 
+        // Spiele-Funktionen
+        function startGames() {
+            const password = document.getElementById('gamePassword').value;
+            if (password === 'Laura21') {
+                document.querySelector('.games').style.display = 'block';
+            } else {
+                alert('Falsches Passwort!');
+            }
+        }
+
         // Slideshow Funktion
         let currentIndex = 0;
         let slideshowInterval;
 
         function startSlideshow() {
-            const password = document.getElementById('slideshowPassword').value;
-            if (password === 'Laura21') {
-                document.querySelector('.slideshow').style.display = 'block';
-                slideshowInterval = setInterval(() => {
-                    const currentImage = document.querySelector('.slideshow img.active');
-                    currentImage.classList.remove('active');
-                    currentIndex = (currentIndex + 1) % images;
-                    slideshow.children[currentIndex].classList.add('active');
-                }, 5000); // Wechselt alle 5 Sekunden
-            } else {
-                alert('Falsches Passwort!');
-            }
+            document.querySelector('.slideshow').style.display = 'block';
+            slideshowInterval = setInterval(() => {
+                const currentImage = document.querySelector('.slideshow img.active');
+                currentImage.classList.remove('active');
+                currentIndex = (currentIndex + 1) % images;
+                slideshow.children[currentIndex].classList.add('active');
+            }, 5000); // Wechselt alle 5 Sekunden
+        }
+
+        // Memory-Spiel Funktion
+        function startMemoryGame() {
+            // Memory-Spiel-Logik hier hinzufügen
+        }
+
+        // Puzzle-Spiel Funktion
+        function startPuzzleGame() {
+            // Puzzle-Spiel-Logik hier hinzufügen
+        }
+
+        // Slider-Spiel Funktion
+        function startSliderGame() {
+            // Slider-Spiel-Logik hier hinzufügen
         }
     </script>
 </body>
