@@ -22,6 +22,13 @@
             50% { transform: translate(10vw, 10vh) rotate(180deg); opacity: 1; }
             100% { transform: translate(0, 0) rotate(0deg); }
         }
+
+        @keyframes bird-flight {
+            0% { transform: translateX(-100vw) translateY(50vh) rotate(0deg); opacity: 0; }
+            50% { transform: translateX(20vw) translateY(-30vh) rotate(20deg); opacity: 1; }
+            75% { transform: translateX(40vw) translateY(20vh) rotate(-10deg); }
+            100% { transform: translateX(0) translateY(0) rotate(0deg); }
+        }
         
         body {
             font-family: 'Arial', sans-serif;
@@ -61,9 +68,9 @@
             margin-top: 20px;
             font-weight: bold;
         }
-        .fly-in {
+        .fly-in span {
             display: inline-block;
-            animation: fly-in 2s ease-out forwards;
+            animation: bird-flight 2s ease-out forwards;
         }
     </style>
 </head>
@@ -72,7 +79,7 @@
         <h1 class="colorful-text"></h1>
         <p>Ich wünsche dir einen wunderschönen Tag voller Glück und Freude!</p>
         <button onclick="showMessage()">Klick mich!</button>
-        <p id="message">Du bist die beste Schwester der Welt! ❤️</p>
+        <p id="message"></p>
     </div>
     <script>
         const text = "Happy Birthday, Laura! 🎉";
@@ -88,10 +95,20 @@
         });
 
         function showMessage() {
+            const messageText = "Du bist die beste Schwester der Welt! ❤️";
             const message = document.getElementById("message");
+            message.innerHTML = "";
+            message.style.display = "block";
+            
+            messageText.split('').forEach((char, index) => {
+                let span = document.createElement("span");
+                span.textContent = char;
+                span.style.color = colors[index % colors.length];
+                span.style.animationDelay = `${index * 0.1}s`;
+                message.appendChild(span);
+            });
+            
             message.classList.add("fly-in");
-            message.style.display = "inline-block";
-            message.style.color = colors[Math.floor(Math.random() * colors.length)];
         }
     </script>
 </body>
