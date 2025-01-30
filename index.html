@@ -5,14 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Happy Birthday!</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .colorful-text span {
+            display: inline-block;
+            animation: bounce 0.5s infinite alternate;
+            font-size: 2em;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>Happy Birthday, Schwester! 🎉</h1>
+        <h1 class="colorful-text"></h1>
         <p>Ich wünsche dir einen wunderschönen Tag voller Glück und Freude!</p>
         <button onclick="showMessage()">Klick mich!</button>
         <p id="message" class="hidden">Du bist die beste Schwester der Welt! ❤️</p>
     </div>
-    <script src="script.js"></script>
+    <script>
+        const text = "Happy Birthday, Laura! 🎉";
+        const colors = ["red", "blue", "green", "orange", "purple", "pink", "yellow"];
+        const title = document.querySelector(".colorful-text");
+
+        text.split('').forEach((char, index) => {
+            let span = document.createElement("span");
+            span.textContent = char;
+            span.style.color = colors[index % colors.length];
+            span.style.animationDelay = `${index * 0.1}s`;
+            title.appendChild(span);
+        });
+    </script>
 </body>
 </html>
