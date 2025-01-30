@@ -218,38 +218,38 @@
             const memoryGame = document.querySelector('.memory-game');
             memoryGame.style.display = 'block';
             memoryGame.innerHTML = ''; // Reset memory game
-
+        
             let cards = [];
             for (let i = 1; i <= 41; i++) {
                 cards.push(`images/image${i}.jpg`);
             }
             cards = [...cards, ...cards]; // Create pairs
-
+        
             let matchedPairs = 0;
             let selectedCards = [];
             let selectedCardElements = [];
-
+        
             function createBoard() {
                 memoryGame.innerHTML = '';
                 matchedPairs = 0;
                 selectedCards = [];
                 selectedCardElements = [];
-
+        
                 cards.sort(() => 0.5 - Math.random()); // Shuffle cards
-
+        
                 cards.forEach(card => {
                     const cardElement = document.createElement('div');
                     cardElement.className = 'card';
                     cardElement.dataset.card = card;
                     cardElement.innerHTML = `<img src="${card}" class="hidden">`;
                     memoryGame.appendChild(cardElement);
-
+        
                     cardElement.addEventListener('click', () => {
                         if (selectedCards.length < 2 && !cardElement.classList.contains('matched')) {
                             cardElement.querySelector('img').classList.remove('hidden');
                             selectedCards.push(card);
                             selectedCardElements.push(cardElement);
-
+        
                             if (selectedCards.length === 2) {
                                 setTimeout(checkMatch, 1000);
                             }
@@ -257,7 +257,7 @@
                     });
                 });
             }
-
+        
             function checkMatch() {
                 if (selectedCards[0] === selectedCards[1]) {
                     selectedCardElements.forEach(el => el.classList.add('matched'));
@@ -271,7 +271,7 @@
                 selectedCards = [];
                 selectedCardElements = [];
             }
-
+        
             createBoard();
         }
 
