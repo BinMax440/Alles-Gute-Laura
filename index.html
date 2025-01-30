@@ -63,6 +63,20 @@
             0%, 100% { transform: rotate(0deg); }
             50% { transform: rotate(20deg); }
         }
+        .slideshow {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+        .slideshow img {
+            width: 100%;
+            display: none;
+            border-radius: 15px;
+        }
+        .slideshow img.active {
+            display: block;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
@@ -74,7 +88,9 @@
         <p id="message"></p>
         <p id="counter"></p>
     </div>
-    <img src="images/funny-image.jpg" class="dancing-image" style="top: 50px; left: 50px;">
+    <div class="slideshow">
+        <!-- Bilder werden hier dynamisch hinzugefügt -->
+    </div>
     <script>
         const text = "Happy Birthday, Laura! ";
         const colors = ["#ff0000", "#ff7f00", "#ffff00", "#00ff00", "#0000ff", "#4b0082", "#9400d3"];
@@ -127,6 +143,25 @@
 
         setInterval(updateCounter, 1000);
         updateCounter();
+
+        // Bilder für die Slideshow hinzufügen
+        const images = 41;
+        const slideshow = document.querySelector('.slideshow');
+        for (let i = 1; i <= images; i++) {
+            const img = document.createElement('img');
+            img.src = `images/image${i}.jpg`;
+            if (i === 1) img.classList.add('active');
+            slideshow.appendChild(img);
+        }
+
+        // Slideshow Funktion
+        let currentIndex = 0;
+        setInterval(() => {
+            const currentImage = document.querySelector('.slideshow img.active');
+            currentImage.classList.remove('active');
+            currentIndex = (currentIndex + 1) % images;
+            slideshow.children[currentIndex].classList.add('active');
+        }, 3000); // Wechselt alle 3 Sekunden
     </script>
 </body>
 </html>
