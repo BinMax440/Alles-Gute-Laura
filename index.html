@@ -54,7 +54,17 @@
             margin-top: 20px;
             font-weight: bold;
         }
+        .dancing-image {
+            width: 100px;
+            position: absolute;
+            animation: dance 2s infinite;
+        }
+        @keyframes dance {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(20deg); }
+        }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -64,6 +74,7 @@
         <p id="message"></p>
         <p id="counter"></p>
     </div>
+    <img src="https://example.com/funny-image.gif" class="dancing-image" style="top: 50px; left: 50px;">
     <script>
         const text = "Happy Birthday, Laura! ";
         const colors = ["#ff0000", "#ff7f00", "#ffff00", "#00ff00", "#0000ff", "#4b0082", "#9400d3"];
@@ -89,6 +100,12 @@
                 span.style.opacity = 1;
                 message.appendChild(span);
             });
+
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
         }
 
         function updateCounter() {
@@ -104,6 +121,10 @@
             document.getElementById("counter").textContent = `Laura lebt seit ${days} Tagen, ${hours} Stunden, ${minutes} Minuten und ${seconds} Sekunden!`;
         }
         
+        setTimeout(() => {
+            alert("Überraschung! 🎉 Du bist die beste, Laura!");
+        }, 10000); // 10 Sekunden Verzögerung
+
         setInterval(updateCounter, 1000);
         updateCounter();
     </script>
