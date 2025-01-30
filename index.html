@@ -68,6 +68,7 @@
             max-width: 600px;
             margin: 0 auto;
             position: relative;
+            display: none; /* initially hidden */
         }
         .slideshow img {
             width: 100%;
@@ -87,6 +88,8 @@
         <button onclick="showMessage()">Klick mich!</button>
         <p id="message"></p>
         <p id="counter"></p>
+        <input type="password" id="slideshowPassword" placeholder="Passwort eingeben">
+        <button onclick="startSlideshow()">Start Slideshow</button>
     </div>
     <div class="slideshow">
         <!-- Bilder werden hier dynamisch hinzugefügt -->
@@ -137,10 +140,6 @@
             document.getElementById("counter").textContent = `Laura lebt seit ${days} Tagen, ${hours} Stunden, ${minutes} Minuten und ${seconds} Sekunden!`;
         }
         
-        setTimeout(() => {
-            alert("Überraschung! 🎉 Du bist die beste, Laura!");
-        }, 10000); // 10 Sekunden Verzögerung
-
         setInterval(updateCounter, 1000);
         updateCounter();
 
@@ -156,12 +155,22 @@
 
         // Slideshow Funktion
         let currentIndex = 0;
-        setInterval(() => {
-            const currentImage = document.querySelector('.slideshow img.active');
-            currentImage.classList.remove('active');
-            currentIndex = (currentIndex + 1) % images;
-            slideshow.children[currentIndex].classList.add('active');
-        }, 3000); // Wechselt alle 3 Sekunden
+        let slideshowInterval;
+
+        function startSlideshow() {
+            const password = document.getElementById('slideshowPassword').value;
+            if (password === 'Laura21') {
+                document.querySelector('.slideshow').style.display = 'block';
+                slideshowInterval = setInterval(() => {
+                    const currentImage = document.querySelector('.slideshow img.active');
+                    currentImage.classList.remove('active');
+                    currentIndex = (currentIndex + 1) % images;
+                    slideshow.children[currentIndex].classList.add('active');
+                }, 5000); // Wechselt alle 5 Sekunden
+            } else {
+                alert('Falsches Passwort!');
+            }
+        }
     </script>
 </body>
 </html>
