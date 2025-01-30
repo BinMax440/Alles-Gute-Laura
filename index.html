@@ -194,178 +194,172 @@
 
         // Memory-Spiel Funktion
         function startMemoryGame() {
-            function startMemoryGame() {
-    const memoryGame = document.querySelector('.memory-game');
-    memoryGame.style.display = 'block';
-    memoryGame.innerHTML = ''; // Reset memory game
+            const memoryGame = document.querySelector('.memory-game');
+            memoryGame.style.display = 'block';
+            memoryGame.innerHTML = ''; // Reset memory game
 
-    let cards = [];
-    for (let i = 1; i <= 41; i++) {
-        cards.push(`images/image${i}.jpg`);
-    }
-    cards = [...cards, ...cards]; // Create pairs
-
-    let level = 1;
-    let matchedPairs = 0;
-    let selectedCards = [];
-    let selectedCardElements = [];
-
-    function createBoard() {
-        memoryGame.innerHTML = '';
-        matchedPairs = 0;
-        selectedCards = [];
-        selectedCardElements = [];
-
-        const levelCards = cards.slice(0, level * 2);
-        levelCards.sort(() => 0.5 - Math.random()); // Shuffle cards
-
-        levelCards.forEach(card => {
-            const cardElement = document.createElement('div');
-            cardElement.className = 'card';
-            cardElement.dataset.card = card;
-            cardElement.innerHTML = `<img src="${card}" class="hidden">`;
-            memoryGame.appendChild(cardElement);
-
-            cardElement.addEventListener('click', () => {
-                if (selectedCards.length < 2 && !cardElement.classList.contains('matched')) {
-                    cardElement.querySelector('img').classList.remove('hidden');
-                    selectedCards.push(card);
-                    selectedCardElements.push(cardElement);
-
-                    if (selectedCards.length === 2) {
-                        setTimeout(checkMatch, 1000);
-                    }
-                }
-            });
-        });
-    }
-
-    function checkMatch() {
-        if (selectedCards[0] === selectedCards[1]) {
-            selectedCardElements.forEach(el => el.classList.add('matched'));
-            matchedPairs++;
-            if (matchedPairs === level) {
-                if (level < 41) {
-                    level++;
-                    createBoard();
-                } else {
-                    alert('Herzlichen Glückwunsch! Du hast alle Level abgeschlossen!');
-                }
+            let cards = [];
+            for (let i = 1; i <= 41; i++) {
+                cards.push(`images/image${i}.jpg`);
             }
-        } else {
-            selectedCardElements.forEach(el => el.querySelector('img').classList.add('hidden'));
-        }
-        selectedCards = [];
-        selectedCardElements = [];
-    }
+            cards = [...cards, ...cards]; // Create pairs
 
-    createBoard();
-}
+            let level = 1;
+            let matchedPairs = 0;
+            let selectedCards = [];
+            let selectedCardElements = [];
+
+            function createBoard() {
+                memoryGame.innerHTML = '';
+                matchedPairs = 0;
+                selectedCards = [];
+                selectedCardElements = [];
+
+                const levelCards = cards.slice(0, level * 2);
+                levelCards.sort(() => 0.5 - Math.random()); // Shuffle cards
+
+                levelCards.forEach(card => {
+                    const cardElement = document.createElement('div');
+                    cardElement.className = 'card';
+                    cardElement.dataset.card = card;
+                    cardElement.innerHTML = `<img src="${card}" class="hidden">`;
+                    memoryGame.appendChild(cardElement);
+
+                    cardElement.addEventListener('click', () => {
+                        if (selectedCards.length < 2 && !cardElement.classList.contains('matched')) {
+                            cardElement.querySelector('img').classList.remove('hidden');
+                            selectedCards.push(card);
+                            selectedCardElements.push(cardElement);
+
+                            if (selectedCards.length === 2) {
+                                setTimeout(checkMatch, 1000);
+                            }
+                        }
+                    });
+                });
+            }
+
+            function checkMatch() {
+                if (selectedCards[0] === selectedCards[1]) {
+                    selectedCardElements.forEach(el => el.classList.add('matched'));
+                    matchedPairs++;
+                    if (matchedPairs === level) {
+                        if (level < 41) {
+                            level++;
+                            createBoard();
+                        } else {
+                            alert('Herzlichen Glückwunsch! Du hast alle Level abgeschlossen!');
+                        }
+                    }
+                } else {
+                    selectedCardElements.forEach(el => el.querySelector('img').classList.add('hidden'));
+                }
+                selectedCards = [];
+                selectedCardElements = [];
+            }
+
+            createBoard();
         }
 
         // Puzzle-Spiel Funktion
         function startPuzzleGame() {
-            function startPuzzleGame() {
-    const puzzleGame = document.querySelector('.puzzle-game');
-    puzzleGame.style.display = 'block';
-    puzzleGame.innerHTML = ''; // Reset puzzle game
+            const puzzleGame = document.querySelector('.puzzle-game');
+            puzzleGame.style.display = 'block';
+            puzzleGame.innerHTML = ''; // Reset puzzle game
 
-    const puzzleSize = 3; // 3x3 grid
-    let tiles = [];
+            const puzzleSize = 3; // 3x3 grid
+            let tiles = [];
 
-    for (let i = 0; i < puzzleSize * puzzleSize; i++) {
-        const tile = document.createElement('div');
-        tile.className = 'tile';
-        tile.dataset.index = i;
-        puzzleGame.appendChild(tile);
-        tiles.push(tile);
-    }
-
-    tiles.sort(() => 0.5 - Math.random()).forEach(tile => puzzleGame.appendChild(tile));
-
-    puzzleGame.addEventListener('click', event => {
-        const tile = event.target;
-        const emptyTile = tiles.find(t => !t.innerHTML);
-        if (tile !== emptyTile && isAdjacent(tile, emptyTile)) {
-            swapTiles(tile, emptyTile);
-            if (isSolved()) {
-                alert('Herzlichen Glückwunsch! Du hast das Puzzle gelöst!');
+            for (let i = 0; i < puzzleSize * puzzleSize; i++) {
+                const tile = document.createElement('div');
+                tile.className = 'tile';
+                tile.dataset.index = i;
+                puzzleGame.appendChild(tile);
+                tiles.push(tile);
             }
-        }
-    });
 
-    function swapTiles(tile1, tile2) {
-        [tile1.innerHTML, tile2.innerHTML] = [tile2.innerHTML, tile1.innerHTML];
-    }
+            tiles.sort(() => 0.5 - Math.random()).forEach(tile => puzzleGame.appendChild(tile));
 
-    function isAdjacent(tile1, tile2) {
-        const index1 = parseInt(tile1.dataset.index);
-        const index2 = parseInt(tile2.dataset.index);
-        const row1 = Math.floor(index1 / puzzleSize);
-        const col1 = index1 % puzzleSize;
-        const row2 = Math.floor(index2 / puzzleSize);
-        const col2 = index2 % puzzleSize;
-        return (Math.abs(row1 - row2) + Math.abs(col1 - col2)) === 1;
-    }
+            puzzleGame.addEventListener('click', event => {
+                const tile = event.target;
+                const emptyTile = tiles.find(t => !t.innerHTML);
+                if (tile !== emptyTile && isAdjacent(tile, emptyTile)) {
+                    swapTiles(tile, emptyTile);
+                    if (isSolved()) {
+                        alert('Herzlichen Glückwunsch! Du hast das Puzzle gelöst!');
+                    }
+                }
+            });
 
-    function isSolved() {
-        return tiles.every((tile, index) => tile.dataset.index == index);
-    }
-}
+            function swapTiles(tile1, tile2) {
+                [tile1.innerHTML, tile2.innerHTML] = [tile2.innerHTML, tile1.innerHTML];
+            }
+
+            function isAdjacent(tile1, tile2) {
+                const index1 = parseInt(tile1.dataset.index);
+                const index2 = parseInt(tile2.dataset.index);
+                const row1 = Math.floor(index1 / puzzleSize);
+                const col1 = index1 % puzzleSize;
+                const row2 = Math.floor(index2 / puzzleSize);
+                const col2 = index2 % puzzleSize;
+                return (Math.abs(row1 - row2) + Math.abs(col1 - col2)) === 1;
+            }
+
+            function isSolved() {
+                return tiles.every((tile, index) => tile.dataset.index == index);
+            }
         }
 
         // Slider-Spiel Funktion
         function startSliderGame() {
-          function startSliderGame() {
-    const sliderGame = document.querySelector('.slider-game');
-    sliderGame.style.display = 'block';
-    sliderGame.innerHTML = ''; // Reset slider game
+            const sliderGame = document.querySelector('.slider-game');
+            sliderGame.style.display = 'block';
+            sliderGame.innerHTML = ''; // Reset slider game
 
-    const sliderSize = 4; // 4x4 grid
-    let tiles = [];
+            const sliderSize = 4; // 4x4 grid
+            let tiles = [];
 
-    for (let i = 0; i < sliderSize * sliderSize; i++) {
-        const tile = document.createElement('div');
-        tile.className = 'tile';
-        tile.dataset.index = i;
-        if (i < sliderSize * sliderSize - 1) {
-            tile.innerHTML = i + 1;
-        }
-        sliderGame.appendChild(tile);
-        tiles.push(tile);
-    }
-
-    tiles.sort(() => 0.5 - Math.random()).forEach(tile => sliderGame.appendChild(tile));
-
-    sliderGame.addEventListener('click', event => {
-        const tile = event.target;
-        const emptyTile = tiles.find(t => !t.innerHTML);
-        if (tile !== emptyTile && isAdjacent(tile, emptyTile)) {
-            swapTiles(tile, emptyTile);
-            if (isSolved()) {
-                alert('Herzlichen Glückwunsch! Du hast das Slider-Spiel gelöst!');
+            for (let i = 0; i < sliderSize * sliderSize; i++) {
+                const tile = document.createElement('div');
+                tile.className = 'tile';
+                tile.dataset.index = i;
+                if (i < sliderSize * sliderSize - 1) {
+                    tile.innerHTML = i + 1;
+                }
+                sliderGame.appendChild(tile);
+                tiles.push(tile);
             }
-        }
-    });
 
-    function swapTiles(tile1, tile2) {
-        [tile1.innerHTML, tile2.innerHTML] = [tile2.innerHTML, tile1.innerHTML];
-    }
+            tiles.sort(() => 0.5 - Math.random()).forEach(tile => sliderGame.appendChild(tile));
 
-    function isAdjacent(tile1, tile2) {
-        const index1 = parseInt(tile1.dataset.index);
-        const index2 = parseInt(tile2.dataset.index);
-        const row1 = Math.floor(index1 / sliderSize);
-        const col1 = index1 % sliderSize;
-        const row2 = Math.floor(index2 / sliderSize);
-        const col2 = index2 % sliderSize;
-        return (Math.abs(row1 - row2) + Math.abs(col1 - col2)) === 1;
-    }
+            sliderGame.addEventListener('click', event => {
+                const tile = event.target;
+                const emptyTile = tiles.find(t => !t.innerHTML);
+                if (tile !== emptyTile && isAdjacent(tile, emptyTile)) {
+                    swapTiles(tile, emptyTile);
+                    if (isSolved()) {
+                        alert('Herzlichen Glückwunsch! Du hast das Slider-Spiel gelöst!');
+                    }
+                }
+            });
 
-    function isSolved() {
-        return tiles.every((tile, index) => tile.dataset.index == index);
-    }
-}  
+            function swapTiles(tile1, tile2) {
+                [tile1.innerHTML, tile2.innerHTML] = [tile2.innerHTML, tile1.innerHTML];
+            }
+
+            function isAdjacent(tile1, tile2) {
+                const index1 = parseInt(tile1.dataset.index);
+                const index2 = parseInt(tile2.dataset.index);
+                const row1 = Math.floor(index1 / sliderSize);
+                const col1 = index1 % sliderSize;
+                const row2 = Math.floor(index2 / sliderSize);
+                const col2 = index2 % sliderSize;
+                return (Math.abs(row1 - row2) + Math.abs(col1 - col2)) === 1;
+            }
+
+            function isSolved() {
+                return tiles.every((tile, index) => tile.dataset.index == index);
+            }
         }
     </script>
 </body>
