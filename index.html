@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Happy Birthday Laura!</title>
+    <title>Happy Birthday!</title>
     <link rel="stylesheet" href="style.css">
     <style>
         @keyframes bounce {
@@ -15,6 +15,12 @@
             0% { text-shadow: 0 0 5px #fff, 0 0 10px #ff69b4, 0 0 15px #ff1493; }
             50% { text-shadow: 0 0 10px #fff, 0 0 20px #ff69b4, 0 0 30px #ff1493; }
             100% { text-shadow: 0 0 5px #fff, 0 0 10px #ff69b4, 0 0 15px #ff1493; }
+        }
+        
+        @keyframes fly-in {
+            0% { transform: translate(-100vw, -100vh) rotate(0deg); opacity: 0; }
+            50% { transform: translate(10vw, 10vh) rotate(180deg); opacity: 1; }
+            100% { transform: translate(0, 0) rotate(0deg); }
         }
         
         body {
@@ -49,22 +55,27 @@
         button:hover {
             background: #ff1493;
         }
-        .hidden {
+        #message {
             display: none;
             font-size: 1.5em;
             margin-top: 20px;
+            font-weight: bold;
+        }
+        .fly-in {
+            display: inline-block;
+            animation: fly-in 2s ease-out forwards;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1 class="colorful-text"></h1>
-        <p>eine website nur für dich :D</p>
-        <button onclick="showMessage()">Hier steht was nettes!</button>
-        <p id="message" class="hidden">Du bist die beste Schwester der Welt! ❤️</p>
+        <p>Ich wünsche dir einen wunderschönen Tag voller Glück und Freude!</p>
+        <button onclick="showMessage()">Klick mich!</button>
+        <p id="message">Du bist die beste Schwester der Welt! ❤️</p>
     </div>
     <script>
-        const text = "Happy Birthday, Laura!";
+        const text = "Happy Birthday, Laura! 🎉";
         const colors = ["#ff0000", "#ff7f00", "#ffff00", "#00ff00", "#0000ff", "#4b0082", "#9400d3"];
         const title = document.querySelector(".colorful-text");
 
@@ -77,7 +88,10 @@
         });
 
         function showMessage() {
-            document.getElementById("message").classList.remove("hidden");
+            const message = document.getElementById("message");
+            message.classList.add("fly-in");
+            message.style.display = "inline-block";
+            message.style.color = colors[Math.floor(Math.random() * colors.length)];
         }
     </script>
 </body>
