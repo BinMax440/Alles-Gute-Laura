@@ -63,79 +63,40 @@
             0%, 100% { transform: rotate(0deg); }
             50% { transform: rotate(20deg); }
         }
-        .slideshow, .games, .memory-game, .puzzle-game, .slider-game {
+        .slideshow, .games, .quiz-game, .find-image-game, .guess-image-game {
             width: 100%;
             max-width: 600px;
             margin: 20px auto;
             position: relative;
             display: none; /* initially hidden */
         }
-        .slideshow img, .memory-game img, .puzzle-game img, .slider-game img {
+        .slideshow img, .quiz-game img, .find-image-game img, .guess-image-game img {
             width: 100%;
             display: none;
             border-radius: 15px;
         }
-        .slideshow img.active, .memory-game img.active, .puzzle-game img.active, .slider-game img.active {
+        .slideshow img.active, .quiz-game img.active, .find-image-game img.active, .guess-image-game img.active {
             display: block;
         }
-        .memory-game .card {
-            width: 100px;
-            height: 100px;
-            display: inline-block;
-            margin: 5px;
-            position: relative;
-            cursor: pointer;
-            perspective: 1000px;
+        .quiz-game input, .find-image-game button, .guess-image-game button {
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 1em;
+            border-radius: 5px;
+            border: none;
         }
-        .memory-game .card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
-        }
-        .memory-game .card.flipped .card-inner {
-            transform: rotateY(180deg);
-        }
-        .memory-game .card-front, .memory-game .card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            border-radius: 10px;
-        }
-        .memory-game .card-back {
-            background: linear-gradient(45deg, #800080, #ff1493);
-            transform: rotateY(180deg);
-        }
-        .memory-game .card-front img {
-            width: 100%;
-            height: 100%;
-            border-radius: 10px;
-        }
-        .memory-game .card.matched .card-inner {
-            opacity: 0.5;
-        }
-        .puzzle-game, .slider-game {
+        .find-image-game .image-grid, .guess-image-game .image-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
+            margin-top: 20px;
         }
-        .puzzle-game .tile, .slider-game .tile {
-            width: 100px;
+        .find-image-game .image-grid img, .guess-image-game .image-grid img {
+            width: 100%;
             height: 100px;
-            background: #ff69b4;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            cursor: pointer;
+            object-fit: cover;
             border-radius: 10px;
-        }
-        .slider-game .tile.empty {
-            background: transparent;
-            border: 2px dashed #ff1493;
+            cursor: pointer;
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
@@ -152,21 +113,32 @@
     </div>
     <div class="games">
         <button onclick="startSlideshow()">Start Slideshow</button>
-        <button onclick="startMemoryGame()">Start Memory</button>
-        <button onclick="startPuzzleGame()">Start Puzzle</button>
-        <button onclick="startSliderGame()">Start Slider</button>
+        <button onclick="startQuizGame()">Start Bilderrätsel</button>
+        <button onclick="startFindImageGame()">Start Bildersuchspiel</button>
+        <button onclick="startGuessImageGame()">Start Bilderratespiel</button>
     </div>
     <div class="slideshow">
         <!-- Bilder werden hier dynamisch hinzugefügt -->
     </div>
-    <div class="memory-game">
-        <!-- Memory-Spiel wird hier dynamisch hinzugefügt -->
+    <div class="quiz-game">
+        <img src="" alt="Quiz Bild">
+        <input type="text" id="quizAnswer" placeholder="Deine Antwort">
+        <button onclick="checkQuizAnswer()">Antwort überprüfen</button>
+        <p id="quizResult"></p>
     </div>
-    <div class="puzzle-game">
-        <!-- Puzzle-Spiel wird hier dynamisch hinzugefügt -->
+    <div class="find-image-game">
+        <img src="" alt="Gesuchtes Bild" class="target-image">
+        <div class="image-grid">
+            <!-- Bilder werden hier dynamisch hinzugefügt -->
+        </div>
+        <p id="findImageResult"></p>
     </div>
-    <div class="slider-game">
-        <!-- Slider-Spiel wird hier dynamisch hinzugefügt -->
+    <div class="guess-image-game">
+        <div class="image-grid">
+            <!-- Bildausschnitte werden hier dynamisch hinzugefügt -->
+        </div>
+        <button onclick="checkGuess()">Bild erraten</button>
+        <p id="guessImageResult"></p>
     </div>
     <script>
         const text = "Happy Birthday, Laura! ";
@@ -253,175 +225,80 @@
             }, 3000); // Wechselt alle 3 Sekunden
         }
 
-        // Memory-Spiel Funktion
-        function startMemoryGame() {
-            const memoryGame = document.querySelector('.memory-game');
-            memoryGame.style.display = 'block';
-            memoryGame.innerHTML = ''; // Reset memory game
+        // Bilderrätsel (Quiz)
+        function startQuizGame() {
+            const quizGame = document.querySelector('.quiz-game');
+            quizGame.style.display = 'block';
+            const randomIndex = Math.floor(Math.random() * imagePaths.length);
+            const randomImage = imagePaths[randomIndex];
+            quizGame.querySelector('img').src = randomImage;
 
-            let cards = [...imagePaths.slice(0, 8), ...imagePaths.slice(0, 8)]; // Nur 8 Paare für das Beispiel
-            let matchedPairs = 0;
-            let selectedCards = [];
-            let selectedCardElements = [];
+            document.getElementById('quizResult').textContent = '';
+        }
 
-            function createBoard() {
-                memoryGame.innerHTML = '';
-                matchedPairs = 0;
-                selectedCards = [];
-                selectedCardElements = [];
+        function checkQuizAnswer() {
+            const answer = document.getElementById('quizAnswer').value.toLowerCase();
+            const correctAnswer = "laura"; // Beispielantwort
+            if (answer === correctAnswer) {
+                document.getElementById('quizResult').textContent = "Richtig! 🎉";
+                confetti({ particleCount: 100, spread: 70 });
+            } else {
+                document.getElementById('quizResult').textContent = "Falsch! Versuch es nochmal.";
+            }
+        }
 
-                cards.sort(() => 0.5 - Math.random()); // Karten mischen
+        // Bildersuchspiel
+        function startFindImageGame() {
+            const findImageGame = document.querySelector('.find-image-game');
+            findImageGame.style.display = 'block';
+            const randomIndex = Math.floor(Math.random() * imagePaths.length);
+            const randomImage = imagePaths[randomIndex];
+            findImageGame.querySelector('.target-image').src = randomImage;
 
-                cards.forEach(card => {
-                    const cardElement = document.createElement('div');
-                    cardElement.className = 'card';
-                    cardElement.innerHTML = `
-                        <div class="card-inner">
-                            <div class="card-front"><img src="${card}"></div>
-                            <div class="card-back"></div>
-                        </div>`;
-                    memoryGame.appendChild(cardElement);
-
-                    cardElement.addEventListener('click', () => {
-                        if (selectedCards.length < 2 && !cardElement.classList.contains('matched')) {
-                            cardElement.classList.add('flipped');
-                            selectedCards.push(card);
-                            selectedCardElements.push(cardElement);
-
-                            if (selectedCards.length === 2) {
-                                setTimeout(checkMatch, 1000);
-                            }
-                        }
-                    });
+            const imageGrid = findImageGame.querySelector('.image-grid');
+            imageGrid.innerHTML = '';
+            const shuffledImages = [...imagePaths].sort(() => Math.random() - 0.5).slice(0, 6);
+            shuffledImages.forEach(img => {
+                const imgElement = document.createElement('img');
+                imgElement.src = img;
+                imgElement.addEventListener('click', () => {
+                    if (img === randomImage) {
+                        document.getElementById('findImageResult').textContent = "Richtig gefunden! 🎉";
+                        confetti({ particleCount: 100, spread: 70 });
+                    } else {
+                        document.getElementById('findImageResult').textContent = "Falsch! Versuch es nochmal.";
+                    }
                 });
-            }
-
-            function checkMatch() {
-                if (selectedCards[0] === selectedCards[1]) {
-                    selectedCardElements.forEach(el => el.classList.add('matched'));
-                    matchedPairs++;
-                    if (matchedPairs === cards.length / 2) {
-                        alert('Herzlichen Glückwunsch! Du hast das Memory-Spiel gelöst!');
-                    }
-                } else {
-                    selectedCardElements.forEach(el => el.classList.remove('flipped'));
-                }
-                selectedCards = [];
-                selectedCardElements = [];
-            }
-
-            createBoard();
+                imageGrid.appendChild(imgElement);
+            });
         }
 
-        // Puzzle-Spiel Funktion
-        function startPuzzleGame() {
-            const puzzleGame = document.querySelector('.puzzle-game');
-            puzzleGame.style.display = 'grid';
-            puzzleGame.innerHTML = ''; // Reset puzzle game
+        // Bilderratespiel (Montage)
+        function startGuessImageGame() {
+            const guessImageGame = document.querySelector('.guess-image-game');
+            guessImageGame.style.display = 'block';
+            const randomIndex = Math.floor(Math.random() * imagePaths.length);
+            const randomImage = imagePaths[randomIndex];
 
-            const puzzleSize = 3; // 3x3 grid
-            let tiles = [];
-
-            for (let i = 0; i < puzzleSize * puzzleSize; i++) {
-                const tile = document.createElement('div');
-                tile.className = 'tile';
-                tile.dataset.index = i;
-                if (i < puzzleSize * puzzleSize - 1) {
-                    tile.style.backgroundImage = `url(${imagePaths[i]})`;
-                    tile.style.backgroundSize = 'cover';
-                } else {
-                    tile.className += ' empty';
-                }
-                puzzleGame.appendChild(tile);
-                tiles.push(tile);
+            const imageGrid = guessImageGame.querySelector('.image-grid');
+            imageGrid.innerHTML = '';
+            for (let i = 0; i < 9; i++) {
+                const imgElement = document.createElement('img');
+                imgElement.src = randomImage;
+                imgElement.style.objectPosition = `${-Math.floor(Math.random() * 50)}% ${-Math.floor(Math.random() * 50)}%`;
+                imageGrid.appendChild(imgElement);
             }
 
-            tiles.sort(() => 0.5 - Math.random()).forEach(tile => puzzleGame.appendChild(tile));
-
-            puzzleGame.addEventListener('click', event => {
-                const tile = event.target;
-                const emptyTile = tiles.find(t => t.classList.contains('empty'));
-                if (tile !== emptyTile && isAdjacent(tile, emptyTile)) {
-                    swapTiles(tile, emptyTile);
-                    if (isSolved()) {
-                        alert('Herzlichen Glückwunsch! Du hast das Puzzle gelöst!');
-                    }
-                }
-            });
-
-            function swapTiles(tile1, tile2) {
-                [tile1.style.backgroundImage, tile2.style.backgroundImage] = [tile2.style.backgroundImage, tile1.style.backgroundImage];
-                [tile1.className, tile2.className] = [tile2.className, tile1.className];
-            }
-
-            function isAdjacent(tile1, tile2) {
-                const index1 = parseInt(tile1.dataset.index);
-                const index2 = parseInt(tile2.dataset.index);
-                const row1 = Math.floor(index1 / puzzleSize);
-                const col1 = index1 % puzzleSize;
-                const row2 = Math.floor(index2 / puzzleSize);
-                const col2 = index2 % puzzleSize;
-                return (Math.abs(row1 - row2) + Math.abs(col1 - col2)) === 1;
-            }
-
-            function isSolved() {
-                return tiles.every((tile, index) => tile.style.backgroundImage === `url(${imagePaths[index]})` || tile.classList.contains('empty'));
-            }
+            document.getElementById('guessImageResult').textContent = '';
         }
 
-        // Slider-Spiel Funktion
-        function startSliderGame() {
-            const sliderGame = document.querySelector('.slider-game');
-            sliderGame.style.display = 'grid';
-            sliderGame.innerHTML = ''; // Reset slider game
-
-            const sliderSize = 3; // 3x3 grid
-            let tiles = [];
-
-            for (let i = 0; i < sliderSize * sliderSize; i++) {
-                const tile = document.createElement('div');
-                tile.className = 'tile';
-                tile.dataset.index = i;
-                if (i < sliderSize * sliderSize - 1) {
-                    tile.style.backgroundImage = `url(${imagePaths[i]})`;
-                    tile.style.backgroundSize = 'cover';
-                } else {
-                    tile.className += ' empty';
-                }
-                sliderGame.appendChild(tile);
-                tiles.push(tile);
-            }
-
-            tiles.sort(() => 0.5 - Math.random()).forEach(tile => sliderGame.appendChild(tile));
-
-            sliderGame.addEventListener('click', event => {
-                const tile = event.target;
-                const emptyTile = tiles.find(t => t.classList.contains('empty'));
-                if (tile !== emptyTile && isAdjacent(tile, emptyTile)) {
-                    swapTiles(tile, emptyTile);
-                    if (isSolved()) {
-                        alert('Herzlichen Glückwunsch! Du hast das Slider-Spiel gelöst!');
-                    }
-                }
-            });
-
-            function swapTiles(tile1, tile2) {
-                [tile1.style.backgroundImage, tile2.style.backgroundImage] = [tile2.style.backgroundImage, tile1.style.backgroundImage];
-                [tile1.className, tile2.className] = [tile2.className, tile1.className];
-            }
-
-            function isAdjacent(tile1, tile2) {
-                const index1 = parseInt(tile1.dataset.index);
-                const index2 = parseInt(tile2.dataset.index);
-                const row1 = Math.floor(index1 / sliderSize);
-                const col1 = index1 % sliderSize;
-                const row2 = Math.floor(index2 / sliderSize);
-                const col2 = index2 % sliderSize;
-                return (Math.abs(row1 - row2) + Math.abs(col1 - col2)) === 1;
-            }
-
-            function isSolved() {
-                return tiles.every((tile, index) => tile.style.backgroundImage === `url(${imagePaths[index]})` || tile.classList.contains('empty'));
+        function checkGuess() {
+            const guess = prompt("Welches Bild ist das?");
+            if (guess && guess.toLowerCase() === "laura") { // Beispielantwort
+                document.getElementById('guessImageResult').textContent = "Richtig geraten! 🎉";
+                confetti({ particleCount: 100, spread: 70 });
+            } else {
+                document.getElementById('guessImageResult').textContent = "Falsch! Versuch es nochmal.";
             }
         }
     </script>
