@@ -160,7 +160,7 @@
         }
 
         @media (max-width: 480px) {
-            .colorful-text span {
+            .colorful-texthjjkl span {
                 font-size: 1.2em;
             }
             button {
@@ -314,13 +314,6 @@
             }
         });
 
-        // 1. Zufällige Hintergrundfarbe ändern
-        function changeBackgroundColor() {
-            const colors = ["#ff9a9e", "#fad0c4", "#ffecd2", "#fcb69f", "#ff9a9e", "#ffdde1", "#c3cfe2"];
-            document.body.style.background = colors[Math.floor(Math.random() * colors.length)];
-        }
-        setInterval(changeBackgroundColor, 5000); // Ändert die Farbe alle 5 Sekunden
-
         // 2. Zufällige Emoji-Regen
         function emojiRain() {
             const emojis = ["🎉", "🎂", "🎈", "🎁", "🍰", "🍭", "🍬"];
@@ -395,14 +388,29 @@
         }
         setInterval(rotateImages, 12000); // Rotiert alle 12 Sekunden die Bilder zufällig
 
-        // 7. Zufällige Schriftgröße ändern
-        function changeFontSize() {
-            const elements = document.querySelectorAll('.colorful-text span, #message, #counter, .work-in-progress, footer');
-            elements.forEach(el => {
-                el.style.fontSize = `${Math.random() * 2 + 1}em`;
-            });
+        // 7. Zufällige Geräusche abspielen
+        const sounds = [
+            'sound1.mp3',
+            'sound2.mp3',
+            'sound3.mp3'
+        ];
+        function playRandomSound() {
+            const audio = new Audio(sounds[Math.floor(Math.random() * sounds.length)]);
+            audio.play();
         }
-        setInterval(changeFontSize, 15000); // Ändert alle 15 Sekunden die Schriftgröße zufällig
+        setInterval(playRandomSound, 15000); // Spielt alle 15 Sekunden ein zufälliges Geräusch ab
+
+        // 8. Zufällige Bildvergrößerung
+        function enlargeRandomImage() {
+            const images = document.querySelectorAll('.slideshow img');
+            const randomImage = images[Math.floor(Math.random() * images.length)];
+            randomImage.style.transition = 'transform 0.5s';
+            randomImage.style.transform = 'scale(1.5)';
+            setTimeout(() => {
+                randomImage.style.transform = 'scale(1)';
+            }, 3000); // Vergrößert das Bild für 3 Sekunden
+        }
+        setInterval(enlargeRandomImage, 18000); // Vergrößert alle 18 Sekunden ein zufälliges Bild
     </script>
 </body>
 </html>
