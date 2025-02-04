@@ -126,6 +126,48 @@
         body, html {
             overflow-y: scroll;
         }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 20px;
+            }
+            .colorful-text span {
+                font-size: 1.5em;
+            }
+            button {
+                font-size: 1em;
+                padding: 8px 16px;
+            }
+            #message, #counter {
+                font-size: 1.2em;
+            }
+            .work-in-progress {
+                font-size: 1em;
+            }
+            footer {
+                font-size: 0.8em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .colorful-text span {
+                font-size: 1.2em;
+            }
+            button {
+                font-size: 0.9em;
+                padding: 6px 12px;
+            }
+            #message, #counter {
+                font-size: 1em;
+            }
+            .work-in-progress {
+                font-size: 0.9em;
+            }
+            footer {
+                font-size: 0.7em;
+            }
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
