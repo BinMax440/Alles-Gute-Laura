@@ -16,22 +16,6 @@
             50% { text-shadow: 0 0 10px #fff, 0 0 20px #ff69b4, 0 0 30px #ff1493; }
             100% { text-shadow: 0 0 5px #fff, 0 0 10px #ff69b4, 0 0 15px #ff1493; }
         }
-
-        @keyframes flapWings {
-            0%, 100% { transform: rotate(0deg); }
-            50% { transform: rotate(-10deg); }
-        }
-
-        @keyframes flyIn {
-            0% {
-                transform: translateX(-100%) translateY(-100%);
-                opacity: 0;
-            }
-            100% {
-                transform: translateX(0) translateY(0);
-                opacity: 1;
-            }
-        }
         
         body {
             font-family: 'Arial', sans-serif;
@@ -39,7 +23,8 @@
             text-align: center;
             color: white;
             padding: 50px;
-            overflow: hidden; /* Verhindert Scrollen während der Animation */
+            overflow-y: auto; /* Scrollen ermöglichen */
+            overflow-x: hidden;
         }
         .container {
             background: rgba(255, 255, 255, 0.2);
@@ -53,76 +38,6 @@
             font-size: 2.5em;
             font-weight: bold;
         }
-        button {
-            background: #ff69b4;
-            border: none;
-            padding: 10px 20px;
-            font-size: 1.2em;
-            color: white;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        button:hover {
-            background: #ff1493;
-        }
-        #message, #counter {
-            font-size: 1.5em;
-            margin-top: 20px;
-            font-weight: bold;
-        }
-        .dancing-image {
-            width: 100px;
-            position: absolute;
-            animation: dance 2s infinite;
-        }
-        @keyframes dance {
-            0%, 100% { transform: rotate(0deg); }
-            50% { transform: rotate(20deg); }
-        }
-        .slideshow {
-            width: 100%;
-            max-width: 600px;
-            margin: 20px auto;
-            position: relative;
-            display: none; /* initially hidden */
-        }
-        .slideshow img {
-            width: 100%;
-            display: none;
-            border-radius: 15px;
-        }
-        .slideshow img.active {
-            display: block;
-        }
-        .work-in-progress {
-            margin-top: 20px;
-            font-size: 1.2em;
-            color: #fff;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 10px;
-            border-radius: 10px;
-        }
-        footer {
-            margin-top: 40px;
-            font-size: 0.9em;
-            color: #fff;
-        }
-        footer a {
-            color: #ff69b4;
-            text-decoration: none;
-        }
-        footer a:hover {
-            text-decoration: underline;
-        }
-        .bird {
-            position: absolute;
-            top: -100px;
-            left: -100px;
-            font-size: 3em;
-            animation: flyIn 2s ease-out forwards, flapWings 0.5s infinite alternate;
-            white-space: nowrap;
-        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
@@ -133,39 +48,7 @@
         <button onclick="showMessage()">Klick mich!</button>
         <p id="message"></p>
         <p id="counter"></p>
-        <div class="work-in-progress">
-            🚧 Diese Website wird noch bearbeitet. Schau bald wieder vorbei! 🚧
-        </div>
-        <input type="password" id="slideshowPassword" placeholder="Passwort eingeben">
-        <button onclick="startSlideshow()">Slideshow starten</button>
     </div>
-    <div class="slideshow">
-        <!-- Bilder werden hier dynamisch hinzugefügt -->
-    </div>
-    <footer>
-        <p><a href="#impressum">Impressum</a> | <a href="#datenschutz">Datenschutz</a></p>
-    </footer>
-
-    <!-- Impressum -->
-    <div id="impressum" style="display: none; margin-top: 40px; background: rgba(255, 255, 255, 0.2); padding: 20px; border-radius: 15px;">
-        <h2>Impressum</h2>
-        <p><strong>Verantwortlich für den Inhalt:</strong></p>
-        <p>Max Mustermann<br>
-        Musterstraße 123<br>
-        12345 Musterstadt<br>
-        Deutschland</p>
-        <p><strong>Kontakt:</strong></p>
-        <p>E-Mail: max.mustermann@example.com</p>
-    </div>
-
-    <!-- Datenschutz -->
-    <div id="datenschutz" style="display: none; margin-top: 40px; background: rgba(255, 255, 255, 0.2); padding: 20px; border-radius: 15px;">
-        <h2>Datenschutz</h2>
-        <p><strong>Datenschutzerklärung:</strong></p>
-        <p>Wir nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Diese Website erhebt und speichert keine personenbezogenen Daten.</p>
-        <p>Für weitere Informationen zum Datenschutz kontaktieren Sie uns bitte unter <a href="mailto:max.mustermann@example.com">max.mustermann@example.com</a>.</p>
-    </div>
-
     <script>
         const text = "Happy Birthday, Laura! ";
         const colors = ["#ff0000", "#ff7f00", "#ffff00", "#00ff00", "#0000ff", "#4b0082", "#9400d3"];
@@ -180,85 +63,13 @@
         });
 
         function showMessage() {
-            const messageText = "Du bist die beste Schwester der Welt! ❤️";
-            const message = document.getElementById("message");
-            message.innerHTML = "";
-
-            // Erstelle ein neues Element für den Vogel
-            const bird = document.createElement('div');
-            bird.className = 'bird';
-            bird.textContent = '🐦'; // Unicode-Zeichen für einen Vogel
-            document.body.appendChild(bird);
-
-            // Entferne das Element nach der Animation
-            setTimeout(() => {
-                bird.remove();
-                message.innerHTML = messageText; // Zeige den Text statisch an
-            }, 2000); // Entferne nach 2 Sekunden
-
+            document.getElementById("message").textContent = "Du bist die beste Schwester der Welt! ❤️";
             confetti({
                 particleCount: 100,
                 spread: 70,
                 origin: { y: 0.6 }
             });
         }
-
-        function updateCounter() {
-            const birthDate = new Date("2004-02-04T00:00:00");
-            const now = new Date();
-            const diff = now - birthDate;
-            
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-            const minutes = Math.floor((diff / (1000 * 60)) % 60);
-            const seconds = Math.floor((diff / 1000) % 60);
-            
-            document.getElementById("counter").textContent = `Laura lebt seit ${days} Tagen, ${hours} Stunden, ${minutes} Minuten und ${seconds} Sekunden!`;
-        }
-        
-        setInterval(updateCounter, 1000);
-        updateCounter();
-
-        // Bilder hinzufügen
-        const images = 41;
-        const slideshow = document.querySelector('.slideshow');
-        for (let i = 1; i <= images; i++) {
-            const img = document.createElement('img');
-            img.src = `images/image${i}.jpg`;
-            if (i === 1) img.classList.add('active');
-            slideshow.appendChild(img);
-        }
-
-        // Slideshow Funktion
-        let currentIndex = 0;
-        let slideshowInterval;
-
-        function startSlideshow() {
-            const password = document.getElementById('slideshowPassword').value;
-            if (password === 'Laura21') { // Passwort: Laura21
-                document.querySelector('.slideshow').style.display = 'block';
-                const slides = document.querySelectorAll('.slideshow img');
-                slideshowInterval = setInterval(() => {
-                    slides[currentIndex].classList.remove('active');
-                    currentIndex = (currentIndex + 1) % slides.length;
-                    slides[currentIndex].classList.add('active');
-                }, 3000); // Wechselt alle 3 Sekunden
-            } else {
-                alert('Falsches Passwort!');
-            }
-        }
-
-        // Impressum und Datenschutz anzeigen
-        document.querySelector('footer').addEventListener('click', (event) => {
-            if (event.target.tagName === 'A') {
-                event.preventDefault();
-                const targetId = event.target.getAttribute('href').substring(1);
-                const targetElement = document.getElementById(targetId);
-                if (targetElement) {
-                    targetElement.style.display = 'block';
-                }
-            }
-        });
     </script>
 </body>
 </html>
