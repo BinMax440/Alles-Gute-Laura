@@ -314,7 +314,7 @@
             }
         });
 
-        // 2. Zufällige Emoji-Regen
+        // 1. Zufällige Emoji-Regen
         function emojiRain() {
             const emojis = ["🎉", "🎂", "🎈", "🎁", "🍰", "🍭", "🍬"];
             const emoji = document.createElement('div');
@@ -329,7 +329,7 @@
         }
         setInterval(emojiRain, 1000); // Lässt jede Sekunde ein Emoji regnen
 
-        // 3. Tanzende Bilder
+        // 2. Tanzende Bilder
         function addDancingImage() {
             const img = document.createElement('img');
             img.src = `images/image${Math.floor(Math.random() * 41) + 1}.jpg`;
@@ -341,7 +341,7 @@
         }
         setInterval(addDancingImage, 7000); // Fügt alle 7 Sekunden ein tanzendes Bild hinzu
 
-        // 4. Zufällige Nachrichten als fliegender Text
+        // 3. Zufällige Nachrichten als fliegender Text
         const messages = [
             "Du bist unglaublich!",
             "Heute ist dein Tag!",
@@ -369,7 +369,7 @@
         }
         setInterval(showFlyingMessage, 8000); // Zeigt alle 8 Sekunden eine zufällige Nachricht an
 
-        // 5. Konfetti-Explosion
+        // 4. Konfetti-Explosion
         function confettiExplosion() {
             confetti({
                 particleCount: 200,
@@ -379,7 +379,7 @@
         }
         setInterval(confettiExplosion, 10000); // Löst alle 10 Sekunden eine Konfetti-Explosion aus
 
-        // 6. Zufällige Bildrotation
+        // 5. Zufällige Bildrotation
         function rotateImages() {
             const images = document.querySelectorAll('.slideshow img');
             images.forEach(img => {
@@ -388,7 +388,7 @@
         }
         setInterval(rotateImages, 12000); // Rotiert alle 12 Sekunden die Bilder zufällig
 
-        // 7. Zufällige Geräusche abspielen
+        // 6. Zufällige Geräusche abspielen
         const sounds = [
             'sound1.mp3',
             'sound2.mp3',
@@ -400,7 +400,7 @@
         }
         setInterval(playRandomSound, 15000); // Spielt alle 15 Sekunden ein zufälliges Geräusch ab
 
-        // 8. Zufällige Bildvergrößerung
+        // 7. Zufällige Bildvergrößerung
         function enlargeRandomImage() {
             const images = document.querySelectorAll('.slideshow img');
             const randomImage = images[Math.floor(Math.random() * images.length)];
