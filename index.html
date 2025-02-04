@@ -32,6 +32,15 @@
                 opacity: 1;
             }
         }
+
+        @keyframes flyAcross {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
         
         body {
             font-family: 'Arial', sans-serif;
@@ -304,6 +313,96 @@
                 }
             }
         });
+
+        // 1. Zufällige Hintergrundfarbe ändern
+        function changeBackgroundColor() {
+            const colors = ["#ff9a9e", "#fad0c4", "#ffecd2", "#fcb69f", "#ff9a9e", "#ffdde1", "#c3cfe2"];
+            document.body.style.background = colors[Math.floor(Math.random() * colors.length)];
+        }
+        setInterval(changeBackgroundColor, 5000); // Ändert die Farbe alle 5 Sekunden
+
+        // 2. Zufällige Emoji-Regen
+        function emojiRain() {
+            const emojis = ["🎉", "🎂", "🎈", "🎁", "🍰", "🍭", "🍬"];
+            const emoji = document.createElement('div');
+            emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            emoji.style.position = 'absolute';
+            emoji.style.left = `${Math.random() * 100}%`;
+            emoji.style.top = '-50px';
+            emoji.style.fontSize = '2em';
+            emoji.style.animation = 'fall 3s linear';
+            document.body.appendChild(emoji);
+            setTimeout(() => emoji.remove(), 3000);
+        }
+        setInterval(emojiRain, 1000); // Lässt jede Sekunde ein Emoji regnen
+
+        // 3. Tanzende Bilder
+        function addDancingImage() {
+            const img = document.createElement('img');
+            img.src = `images/image${Math.floor(Math.random() * 41) + 1}.jpg`;
+            img.className = 'dancing-image';
+            img.style.left = `${Math.random() * 100}%`;
+            img.style.top = `${Math.random() * 100}%`;
+            document.body.appendChild(img);
+            setTimeout(() => img.remove(), 5000); // Entfernt das Bild nach 5 Sekunden
+        }
+        setInterval(addDancingImage, 7000); // Fügt alle 7 Sekunden ein tanzendes Bild hinzu
+
+        // 4. Zufällige Nachrichten als fliegender Text
+        const messages = [
+            "Du bist unglaublich!",
+            "Heute ist dein Tag!",
+            "Feiere schön!",
+            "Du bist ein Superstar!",
+            "Lass dich feiern!",
+            "Genieße deinen Tag!",
+            "Alles Gute!"
+        ];
+        function showFlyingMessage() {
+            const message = document.createElement('div');
+            message.textContent = messages[Math.floor(Math.random() * messages.length)];
+            message.style.position = 'absolute';
+            message.style.top = `${Math.random() * 100}%`;
+            message.style.left = '0';
+            message.style.fontSize = '1.5em';
+            message.style.color = '#fff';
+            message.style.background = 'rgba(0, 0, 0, 0.5)';
+            message.style.padding = '10px';
+            message.style.borderRadius = '10px';
+            message.style.whiteSpace = 'nowrap';
+            message.style.animation = 'flyAcross 5s linear';
+            document.body.appendChild(message);
+            setTimeout(() => message.remove(), 5000); // Entfernt die Nachricht nach 5 Sekunden
+        }
+        setInterval(showFlyingMessage, 8000); // Zeigt alle 8 Sekunden eine zufällige Nachricht an
+
+        // 5. Konfetti-Explosion
+        function confettiExplosion() {
+            confetti({
+                particleCount: 200,
+                spread: 160,
+                origin: { y: 0.6 }
+            });
+        }
+        setInterval(confettiExplosion, 10000); // Löst alle 10 Sekunden eine Konfetti-Explosion aus
+
+        // 6. Zufällige Bildrotation
+        function rotateImages() {
+            const images = document.querySelectorAll('.slideshow img');
+            images.forEach(img => {
+                img.style.transform = `rotate(${Math.random() * 360}deg)`;
+            });
+        }
+        setInterval(rotateImages, 12000); // Rotiert alle 12 Sekunden die Bilder zufällig
+
+        // 7. Zufällige Schriftgröße ändern
+        function changeFontSize() {
+            const elements = document.querySelectorAll('.colorful-text span, #message, #counter, .work-in-progress, footer');
+            elements.forEach(el => {
+                el.style.fontSize = `${Math.random() * 2 + 1}em`;
+            });
+        }
+        setInterval(changeFontSize, 15000); // Ändert alle 15 Sekunden die Schriftgröße zufällig
     </script>
 </body>
 </html>
