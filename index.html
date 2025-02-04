@@ -16,6 +16,22 @@
             50% { text-shadow: 0 0 10px #fff, 0 0 20px #ff69b4, 0 0 30px #ff1493; }
             100% { text-shadow: 0 0 5px #fff, 0 0 10px #ff69b4, 0 0 15px #ff1493; }
         }
+
+        @keyframes flapWings {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(-10deg); }
+        }
+
+        @keyframes flyIn {
+            0% {
+                transform: translateX(-100%) translateY(-100%);
+                opacity: 0;
+            }
+            100% {
+                transform: translateX(0) translateY(0);
+                opacity: 1;
+            }
+        }
         
         body {
             font-family: 'Arial', sans-serif;
@@ -23,6 +39,7 @@
             text-align: center;
             color: white;
             padding: 50px;
+            overflow: hidden; /* Verhindert Scrollen während der Animation */
         }
         .container {
             background: rgba(255, 255, 255, 0.2);
@@ -63,40 +80,48 @@
             0%, 100% { transform: rotate(0deg); }
             50% { transform: rotate(20deg); }
         }
-        .slideshow, .games, .quiz-game, .find-image-game, .guess-image-game {
+        .slideshow {
             width: 100%;
             max-width: 600px;
             margin: 20px auto;
             position: relative;
             display: none; /* initially hidden */
         }
-        .slideshow img, .quiz-game img, .find-image-game img, .guess-image-game img {
+        .slideshow img {
             width: 100%;
             display: none;
             border-radius: 15px;
         }
-        .slideshow img.active, .quiz-game img.active, .find-image-game img.active, .guess-image-game img.active {
+        .slideshow img.active {
             display: block;
         }
-        .quiz-game input, .find-image-game button, .guess-image-game button {
+        .work-in-progress {
             margin-top: 20px;
+            font-size: 1.2em;
+            color: #fff;
+            background: rgba(0, 0, 0, 0.3);
             padding: 10px;
-            font-size: 1em;
-            border-radius: 5px;
-            border: none;
-        }
-        .find-image-game .image-grid, .guess-image-game .image-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-top: 20px;
-        }
-        .find-image-game .image-grid img, .guess-image-game .image-grid img {
-            width: 100%;
-            height: 100px;
-            object-fit: cover;
             border-radius: 10px;
-            cursor: pointer;
+        }
+        footer {
+            margin-top: 40px;
+            font-size: 0.9em;
+            color: #fff;
+        }
+        footer a {
+            color: #ff69b4;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+        .bird {
+            position: absolute;
+            top: -100px;
+            left: -100px;
+            font-size: 3em;
+            animation: flyIn 2s ease-out forwards, flapWings 0.5s infinite alternate;
+            white-space: nowrap;
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
@@ -108,38 +133,39 @@
         <button onclick="showMessage()">Klick mich!</button>
         <p id="message"></p>
         <p id="counter"></p>
-        <input type="password" id="gamePassword" placeholder="Passwort eingeben">
-        <button onclick="startGames()">Start Spiele</button>
-    </div>
-    <div class="games">
-        <button onclick="startSlideshow()">Start Slideshow</button>
-        <button onclick="startQuizGame()">Start Bilderrätsel</button>
-        <button onclick="startFindImageGame()">Start Bildersuchspiel</button>
-        <button onclick="startGuessImageGame()">Start Bilderratespiel</button>
+        <div class="work-in-progress">
+            🚧 Diese Website wird noch bearbeitet. Schau bald wieder vorbei! 🚧
+        </div>
+        <input type="password" id="slideshowPassword" placeholder="Passwort eingeben">
+        <button onclick="startSlideshow()">Slideshow starten</button>
     </div>
     <div class="slideshow">
         <!-- Bilder werden hier dynamisch hinzugefügt -->
     </div>
-    <div class="quiz-game">
-        <img src="" alt="Quiz Bild">
-        <input type="text" id="quizAnswer" placeholder="Deine Antwort">
-        <button onclick="checkQuizAnswer()">Antwort überprüfen</button>
-        <p id="quizResult"></p>
+    <footer>
+        <p><a href="#impressum">Impressum</a> | <a href="#datenschutz">Datenschutz</a></p>
+    </footer>
+
+    <!-- Impressum -->
+    <div id="impressum" style="display: none; margin-top: 40px; background: rgba(255, 255, 255, 0.2); padding: 20px; border-radius: 15px;">
+        <h2>Impressum</h2>
+        <p><strong>Verantwortlich für den Inhalt:</strong></p>
+        <p>Max Mustermann<br>
+        Musterstraße 123<br>
+        12345 Musterstadt<br>
+        Deutschland</p>
+        <p><strong>Kontakt:</strong></p>
+        <p>E-Mail: max.mustermann@example.com</p>
     </div>
-    <div class="find-image-game">
-        <img src="" alt="Gesuchtes Bild" class="target-image">
-        <div class="image-grid">
-            <!-- Bilder werden hier dynamisch hinzugefügt -->
-        </div>
-        <p id="findImageResult"></p>
+
+    <!-- Datenschutz -->
+    <div id="datenschutz" style="display: none; margin-top: 40px; background: rgba(255, 255, 255, 0.2); padding: 20px; border-radius: 15px;">
+        <h2>Datenschutz</h2>
+        <p><strong>Datenschutzerklärung:</strong></p>
+        <p>Wir nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Diese Website erhebt und speichert keine personenbezogenen Daten.</p>
+        <p>Für weitere Informationen zum Datenschutz kontaktieren Sie uns bitte unter <a href="mailto:max.mustermann@example.com">max.mustermann@example.com</a>.</p>
     </div>
-    <div class="guess-image-game">
-        <div class="image-grid">
-            <!-- Bildausschnitte werden hier dynamisch hinzugefügt -->
-        </div>
-        <button onclick="checkGuess()">Bild erraten</button>
-        <p id="guessImageResult"></p>
-    </div>
+
     <script>
         const text = "Happy Birthday, Laura! ";
         const colors = ["#ff0000", "#ff7f00", "#ffff00", "#00ff00", "#0000ff", "#4b0082", "#9400d3"];
@@ -157,14 +183,18 @@
             const messageText = "Du bist die beste Schwester der Welt! ❤️";
             const message = document.getElementById("message");
             message.innerHTML = "";
-            
-            messageText.split('').forEach((char, index) => {
-                let span = document.createElement("span");
-                span.textContent = char;
-                span.style.color = colors[index % colors.length];
-                span.style.opacity = 1;
-                message.appendChild(span);
-            });
+
+            // Erstelle ein neues Element für den Vogel
+            const bird = document.createElement('div');
+            bird.className = 'bird';
+            bird.textContent = '🐦'; // Unicode-Zeichen für einen Vogel
+            document.body.appendChild(bird);
+
+            // Entferne das Element nach der Animation
+            setTimeout(() => {
+                bird.remove();
+                message.innerHTML = messageText; // Zeige den Text statisch an
+            }, 2000); // Entferne nach 2 Sekunden
 
             confetti({
                 particleCount: 100,
@@ -191,24 +221,12 @@
 
         // Bilder hinzufügen
         const images = 41;
-        const imagePaths = [];
         const slideshow = document.querySelector('.slideshow');
         for (let i = 1; i <= images; i++) {
             const img = document.createElement('img');
             img.src = `images/image${i}.jpg`;
-            imagePaths.push(`images/image${i}.jpg`); // Bildpfade speichern
             if (i === 1) img.classList.add('active');
             slideshow.appendChild(img);
-        }
-
-        // Spiele-Funktionen
-        function startGames() {
-            const password = document.getElementById('gamePassword').value;
-            if (password === 'Laura21') {
-                document.querySelector('.games').style.display = 'block';
-            } else {
-                alert('Falsches Passwort!');
-            }
         }
 
         // Slideshow Funktion
@@ -216,91 +234,31 @@
         let slideshowInterval;
 
         function startSlideshow() {
-            document.querySelector('.slideshow').style.display = 'block';
-            const slides = document.querySelectorAll('.slideshow img');
-            slideshowInterval = setInterval(() => {
-                slides[currentIndex].classList.remove('active');
-                currentIndex = (currentIndex + 1) % slides.length;
-                slides[currentIndex].classList.add('active');
-            }, 3000); // Wechselt alle 3 Sekunden
-        }
-
-        // Bilderrätsel (Quiz)
-        function startQuizGame() {
-            const quizGame = document.querySelector('.quiz-game');
-            quizGame.style.display = 'block';
-            const randomIndex = Math.floor(Math.random() * imagePaths.length);
-            const randomImage = imagePaths[randomIndex];
-            quizGame.querySelector('img').src = randomImage;
-
-            document.getElementById('quizResult').textContent = '';
-        }
-
-        function checkQuizAnswer() {
-            const answer = document.getElementById('quizAnswer').value.toLowerCase();
-            const correctAnswer = "laura"; // Beispielantwort
-            if (answer === correctAnswer) {
-                document.getElementById('quizResult').textContent = "Richtig! 🎉";
-                confetti({ particleCount: 100, spread: 70 });
+            const password = document.getElementById('slideshowPassword').value;
+            if (password === 'Laura21') { // Passwort: Laura21
+                document.querySelector('.slideshow').style.display = 'block';
+                const slides = document.querySelectorAll('.slideshow img');
+                slideshowInterval = setInterval(() => {
+                    slides[currentIndex].classList.remove('active');
+                    currentIndex = (currentIndex + 1) % slides.length;
+                    slides[currentIndex].classList.add('active');
+                }, 3000); // Wechselt alle 3 Sekunden
             } else {
-                document.getElementById('quizResult').textContent = "Falsch! Versuch es nochmal.";
+                alert('Falsches Passwort!');
             }
         }
 
-        // Bildersuchspiel
-        function startFindImageGame() {
-            const findImageGame = document.querySelector('.find-image-game');
-            findImageGame.style.display = 'block';
-            const randomIndex = Math.floor(Math.random() * imagePaths.length);
-            const randomImage = imagePaths[randomIndex];
-            findImageGame.querySelector('.target-image').src = randomImage;
-
-            const imageGrid = findImageGame.querySelector('.image-grid');
-            imageGrid.innerHTML = '';
-            const shuffledImages = [...imagePaths].sort(() => Math.random() - 0.5).slice(0, 6);
-            shuffledImages.forEach(img => {
-                const imgElement = document.createElement('img');
-                imgElement.src = img;
-                imgElement.addEventListener('click', () => {
-                    if (img === randomImage) {
-                        document.getElementById('findImageResult').textContent = "Richtig gefunden! 🎉";
-                        confetti({ particleCount: 100, spread: 70 });
-                    } else {
-                        document.getElementById('findImageResult').textContent = "Falsch! Versuch es nochmal.";
-                    }
-                });
-                imageGrid.appendChild(imgElement);
-            });
-        }
-
-        // Bilderratespiel (Montage)
-        function startGuessImageGame() {
-            const guessImageGame = document.querySelector('.guess-image-game');
-            guessImageGame.style.display = 'block';
-            const randomIndex = Math.floor(Math.random() * imagePaths.length);
-            const randomImage = imagePaths[randomIndex];
-
-            const imageGrid = guessImageGame.querySelector('.image-grid');
-            imageGrid.innerHTML = '';
-            for (let i = 0; i < 9; i++) {
-                const imgElement = document.createElement('img');
-                imgElement.src = randomImage;
-                imgElement.style.objectPosition = `${-Math.floor(Math.random() * 50)}% ${-Math.floor(Math.random() * 50)}%`;
-                imageGrid.appendChild(imgElement);
+        // Impressum und Datenschutz anzeigen
+        document.querySelector('footer').addEventListener('click', (event) => {
+            if (event.target.tagName === 'A') {
+                event.preventDefault();
+                const targetId = event.target.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    targetElement.style.display = 'block';
+                }
             }
-
-            document.getElementById('guessImageResult').textContent = '';
-        }
-
-        function checkGuess() {
-            const guess = prompt("Welches Bild ist das?");
-            if (guess && guess.toLowerCase() === "laura") { // Beispielantwort
-                document.getElementById('guessImageResult').textContent = "Richtig geraten! 🎉";
-                confetti({ particleCount: 100, spread: 70 });
-            } else {
-                document.getElementById('guessImageResult').textContent = "Falsch! Versuch es nochmal.";
-            }
-        }
+        });
     </script>
 </body>
 </html>
