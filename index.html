@@ -379,16 +379,7 @@
         }
         setInterval(confettiExplosion, 10000); // Löst alle 10 Sekunden eine Konfetti-Explosion aus
 
-        // 5. Zufällige Bildrotation
-        function rotateImages() {
-            const images = document.querySelectorAll('.slideshow img');
-            images.forEach(img => {
-                img.style.transform = `rotate(${Math.random() * 360}deg)`;
-            });
-        }
-        setInterval(rotateImages, 12000); // Rotiert alle 12 Sekunden die Bilder zufällig
-
-        // 6. Zufällige Geräusche abspielen
+        // 5. Zufällige Geräusche abspielen
         const sounds = [
             'sound1.mp3',
             'sound2.mp3',
@@ -400,9 +391,9 @@
         }
         setInterval(playRandomSound, 15000); // Spielt alle 15 Sekunden ein zufälliges Geräusch ab
 
-        // 7. Zufällige Bildvergrößerung
+        // 6. Zufällige Bildvergrößerung (nicht in der Slideshow)
         function enlargeRandomImage() {
-            const images = document.querySelectorAll('.slideshow img');
+            const images = document.querySelectorAll('.dancing-image');
             const randomImage = images[Math.floor(Math.random() * images.length)];
             randomImage.style.transition = 'transform 0.5s';
             randomImage.style.transform = 'scale(1.5)';
